@@ -27,6 +27,65 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 
+
+            getFavorites: async () => {
+                try {
+                    const response = await fetch('https://urban-space-funicular-xq576v9pv7cv9j-3000.app.github.dev/login', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+            
+                    if (response.status !== 200) {
+                        console.log('Login failed:', response.statusText);
+                        return false;
+                    }
+            
+                    const data = await response.json();
+                    console.log('Login successful:', data);
+                    return true;
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    return false;
+                }
+            },
+            
+
+
+            login: async (email, password) => {
+                try {
+                    const response = await fetch('https://urban-space-funicular-xq576v9pv7cv9j-3000.app.github.dev/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+            
+                    if (response.status !== 200) {
+                        console.log('Login failed:', response.statusText);
+                        return false;
+                    }
+            
+                    const data = await response.json();
+                    console.log('Login successful:', data);
+                    return true;
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    return false;
+                }
+            },
+            
+
+            
         
             deleteFavorites: (name) => {
                 const currentFavorites = getStore().favorites;

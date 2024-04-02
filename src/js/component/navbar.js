@@ -47,6 +47,11 @@ export const Navbar = () => {
 
 					<div className="col-md-2 col-12 d-flex justify-content-end">
 						<div className="dropdown">
+							
+						<Link to="/login">
+          				<button className="btn btn-primary">Login</button>
+        				</Link>
+
 							<button
 								className="btn btn-secondary dropdown-toggle me-3 d-none d-md-block"
 								type="button"
@@ -65,6 +70,8 @@ export const Navbar = () => {
 							>
 								<span className="counter">Favorites {store.counter}</span>
 							</button>
+
+							
 
 							<ul className={`dropy dropdown-menu${isDropdownOpen ? ' show' : ''}`} aria-labelledby="dropdownMenuButton1">
 								{store.favorites.map((item, index) => (
