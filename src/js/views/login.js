@@ -16,8 +16,6 @@ export const Login = () => {
 	const { store, actions } = useContext(Context);
 	const Navigate = useNavigate("")
 
-	
-
 
 	async function handleSubmit(e) {
 		e.preventDefault()
@@ -27,14 +25,12 @@ export const Login = () => {
 		if (logged) {
 			Navigate("/")
 		}
-		
 	}
 
+    
 	useEffect(() => {}
 	, [])
-	
-	
-	
+			
 	
 	return (
         <div className="base container-fluid pt-5 pb-5" >

@@ -14,6 +14,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             counter: 0,
 
+            auth: false
+
         },
 
 
@@ -27,10 +29,35 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 
+            validToken: () => async () => {
+                try {
+                    localStorage.getItem("token")
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/valid-token', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': "Bearer"+ token,
+                        },
+                    });                               
+                    const data = await response.json();
+                    if (response.status === 200){
+                        setStore({auth: data.is_logged})
+                    }
+
+                    console.log('Login successful:', data);
+                    return true;
+                } catch (error) {
+                    console.error('Token expired:', error);
+                    return false;
+                }
+            },
+
+
+
 
             getFavorites: async () => {
                 try {
-                    const response = await fetch('https://urban-space-funicular-xq576v9pv7cv9j-3000.app.github.dev/login', {
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/login', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json'
@@ -59,7 +86,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             login: async (email, password) => {
                 try {
-                    const response = await fetch('https://urban-space-funicular-xq576v9pv7cv9j-3000.app.github.dev/login', {
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/login', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -77,7 +104,9 @@ const getState = ({ getStore, getActions, setStore }) => {
             
                     const data = await response.json();
                     console.log('Login successful:', data);
+                    localStorage.setItem("token", data.access_token)
                     return true;
+
                 } catch (error) {
                     console.error('Error during login:', error);
                     return false;
