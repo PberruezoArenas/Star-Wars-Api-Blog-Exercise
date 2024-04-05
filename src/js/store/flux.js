@@ -29,25 +29,40 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
 
-            validToken: () => async () => {
-                try {
-                    localStorage.getItem("token")
-                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/valid-token', {
+            validToken: async () => {
+                    let token = sessionStorage.getItem("token");
+                    console.log(token+ "TOKEN TOKEN TOKEN");
+                    if (!token){
+                        console.log("Token not found");
+                        setStore({...getStore(),auth: false}) 
+
+                        return false; } 
+                try {   
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/valid-token/', {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': "Bearer"+ token,
+                            'Authorization': "Bearer "+ token,
                         },
-                    });                               
+                    });         
+
+
                     const data = await response.json();
                     if (response.status === 200){
-                        setStore({auth: data.is_logged})
+                        setStore({...getStore(),auth: data.is_logged})
+                        console.log('Login successful:', data);
+                        return true; 
+                    }
+                    else {
+                        sessionStorage.removeItem("token");
+                        setStore({...getStore(),auth: false}) 
+                        return false;
                     }
 
-                    console.log('Login successful:', data);
-                    return true;
                 } catch (error) {
                     console.error('Token expired:', error);
+                    sessionStorage.removeItem("token");
+                    setStore({...getStore(),auth: false}) 
                     return false;
                 }
             },
@@ -67,12 +82,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                             password: password
                         })
                     });
-            
+
                     if (response.status !== 200) {
                         console.log('Login failed:', response.statusText);
                         return false;
                     }
-            
+
                     const data = await response.json();
                     console.log('Login successful:', data);
                     return true;
@@ -81,12 +96,12 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
-            
+
 
 
             login: async (email, password) => {
                 try {
-                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/login', {
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/login/', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -96,15 +111,16 @@ const getState = ({ getStore, getActions, setStore }) => {
                             password: password
                         })
                     });
-            
+
                     if (response.status !== 200) {
                         console.log('Login failed:', response.statusText);
                         return false;
                     }
-            
+
                     const data = await response.json();
                     console.log('Login successful:', data);
-                    localStorage.setItem("token", data.access_token)
+                    sessionStorage.setItem("token", data.access_token)
+                    setStore({ ...getStore(), auth: true })
                     return true;
 
                 } catch (error) {
@@ -112,20 +128,50 @@ const getState = ({ getStore, getActions, setStore }) => {
                     return false;
                 }
             },
-            
 
-            
-        
+
+            registerUser: async (name,email, password) => {
+                try {
+                    const response = await fetch('https://urban-fortnight-7v5p4947r7jhx969-3000.app.github.dev/signup/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            name: name,
+                            email: email,
+                            password: password
+                        })
+                    });
+
+                    if (response.status !== 200) {
+                        console.log('Register failed:', response.statusText);
+                        return { success: false, msg: data.msg };
+                    }
+
+                    const data = await response.json();
+
+
+                    console.log("********"+ data.msg);
+                    return { success: true, msg: data.msg };
+
+                } catch (error) {
+                    console.error('Error during login:', error);
+                    return { success: false, msg: data.msg };
+                }
+            },
+
+
             deleteFavorites: (name) => {
                 const currentFavorites = getStore().favorites;
                 const updatedFavorites = currentFavorites.filter((favorite) => favorite !== name);
-                
+
                 setStore({
                     favorites: updatedFavorites,
                     counter: updatedFavorites.length,
                 });
             },
-            
+
 
 
 

@@ -48,20 +48,20 @@ export const Navbar = () => {
 					<div className="col-md-2 col-12 d-flex justify-content-end">
 						<div className="dropdown">
 							
-						<Link to="/login">
+						{!store.auth &&( <Link to="/login">
           				<button className="btn btn-primary">Login</button>
-        				</Link>
+        				</Link>)}
 
-							<button
+							{store.auth &&( <button
 								className="btn btn-secondary dropdown-toggle me-3 d-none d-md-block"
 								type="button"
 								id="Button1"
 								onClick={handleToggleDropdown}
 							>
 								Favorites <span className="counter">{store.counter}</span>
-							</button>
+							</button>)}
 
-							<button
+							{store.auth &&( <button
 								className="btn btn-secondary dropdown-toggle me-3 d-block d-md-none"
 								type="button"
 								id="Button1"
@@ -69,7 +69,7 @@ export const Navbar = () => {
 								style={{ fontSize: "0.8rem", }}
 							>
 								<span className="counter">Favorites {store.counter}</span>
-							</button>
+							</button>)}
 
 							
 

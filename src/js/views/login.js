@@ -7,6 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 
 
@@ -55,6 +56,11 @@ export const Login = () => {
                         <Button variant="primary" type="submit" onClick={handleSubmit} >
                             Submit
                         </Button>
+
+                        <Link to="/signup"> <Button variant="primary" type="submit" >
+                            Create Account
+                        </Button> </Link>
+
                     </Form></Col>
                 <Col></Col>
             </Row>
